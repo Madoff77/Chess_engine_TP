@@ -126,7 +126,7 @@ class Main:
                             tensor = fen_to_tensor(fen) # (1, 768)
                             # vector = tensor.reshape(1, -1)
                             eval_score = self.evaluate_position(fen)
-                            eval_round = round(eval_score, 2)
+                            eval_round = round(eval_score, 3)
                             eval_str = format(eval_round, ".3f")
                             print(f"Position evaluation: {eval_str}")
 
