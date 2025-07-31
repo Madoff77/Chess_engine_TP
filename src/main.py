@@ -25,7 +25,7 @@ class Main:
     def evaluate_position(self,fen):
         vector = fen_to_tensor(fen).reshape(1, -1)  # (1, 768)
         score = self.model.predict(vector, verbose=0)[0][0]
-        return round(score, 2)
+        return score
 
     def mainloop(self):
         
@@ -126,7 +126,9 @@ class Main:
                             tensor = fen_to_tensor(fen) # (1, 768)
                             # vector = tensor.reshape(1, -1)
                             eval_score = self.evaluate_position(fen)
-                            print(f"Position evaluation: {eval_score}")
+                            eval_round = round(eval_score, 2)
+                            eval_str = format(eval_round, ".3f")
+                            print(f"Position evaluation: {eval_str}")
 
 
                     dragger.undrag_piece()
