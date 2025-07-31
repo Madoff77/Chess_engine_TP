@@ -5,6 +5,7 @@ from move import Move
 
 import copy
 import os
+import chess
 
 class Board:
 
@@ -61,6 +62,55 @@ class Board:
 
         return move in piece.moves
 
+    # def get_fen(self):
+    #     board = chess.Board()
+    #     board.clear_board()
+    #     for row in range(8):
+    #         for col in range(8):
+    #             square = self.squares[row][col]
+    #             if square.has_piece():
+    #                 piece = square.piece
+    #                 color = chess.WHITE if piece.color == 'white' else chess.BLACK
+    #                 piece_type = {
+    #                     'Pawn': chess.PAWN,
+    #                     'Knight': chess.KNIGHT,
+    #                     'Bishop': chess.BISHOP,
+    #                     'Rook': chess.ROOK,
+    #                     'Queen': chess.QUEEN,
+    #                     'King': chess.KING
+    #                 }[type(piece).__name__]
+    #                 board.set_piece_at(chess.square(col, row), chess.Piece(piece_type, color))
+    #     return board.fen()
+    def get_fen(self):
+        piece_to_fen = {
+            'pawn':   'p',
+            'knight': 'n',
+            'bishop': 'b',
+            'rook':   'r',
+            'queen':  'q',
+            'king':   'k'
+        }
+        fen_rows = []
+        for row in self.squares:
+            empty = 0
+            fen_row = ''
+            for square in row:
+                piece = square.piece if hasattr(square, 'piece') else None
+                if piece:
+                    if empty > 0:
+                        fen_row += str(empty)
+                        empty = 0
+                    symbol = piece_to_fen.get(piece.name.lower(), '?')
+                    fen_row += symbol.upper() if piece.color == 'white' else symbol
+                else:
+                    empty += 1
+            if empty > 0:
+                fen_row += str(empty)
+            fen_rows.append(fen_row)
+        fen = '/'.join(fen_rows)
+        # Add default values for active color, castling, en passant, halfmove, fullmove
+        fen += ' w - - 0 1'
+        return fen
     def check_promotion(self, piece, final):
         if final.row == 0 or final.row == 7:
             self.squares[final.row][final.col].piece = Queen(piece.color)

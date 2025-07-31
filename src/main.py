@@ -1,10 +1,17 @@
 import pygame
 import sys
+import numpy as np
+import chess
 
+from prep_data import *
+from model import *
+from tensorflow.keras.models import load_model
+from const import WIDTH, HEIGHT, SQSIZE
 from const import *
 from game import Game
 from square import Square
 from move import Move
+
 
 class Main:
 
@@ -13,6 +20,12 @@ class Main:
         self.screen = pygame.display.set_mode( (WIDTH, HEIGHT) )
         pygame.display.set_caption('Chess')
         self.game = Game()
+        self.model = load_model("model_eval.h5")  # Load your trained model here
+    
+    def evaluate_position(self,fen):
+        vector = fen_to_tensor(fen).reshape(1, -1)  # (1, 768)
+        score = self.model.predict(vector, verbose=0)[0][0]
+        return round(score, 2)
 
     def mainloop(self):
         
@@ -94,6 +107,12 @@ class Main:
                             # print('VALID MOVE:', move)
                             board.set_true_en_passant(dragger.piece)                            
 
+                                                        # Évaluation par le modèle
+                            # fen = board.get_fen()
+                            # tensor = fen_to_tensor(fen).reshape(1, 768)
+                            # eval_model = self.model.predict(tensor)[0][0]
+                            # print("Évaluation du modèle :", eval_model)
+
                             # show methods
                             game.show_bg(screen)
                             game.show_last_move(screen)
@@ -103,7 +122,13 @@ class Main:
                             # if game.is_checkmate(game.board.next_turn()):
                             #     print("Échec et mat ! " + piece.color +" à gagné !" )
                             #     self.running = False
-                    
+                            fen = board.get_fen()  
+                            tensor = fen_to_tensor(fen) # (1, 768)
+                            # vector = tensor.reshape(1, -1)
+                            eval_score = self.evaluate_position(fen)
+                            print(f"Position evaluation: {eval_score}")
+
+
                     dragger.undrag_piece()
                 
                 # key press
