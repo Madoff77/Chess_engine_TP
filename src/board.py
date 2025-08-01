@@ -62,7 +62,7 @@ class Board:
         if target_square.has_piece() and isinstance(target_square.piece, King):
                 print(" Echec et mat !")
                 return False
-        print(f"Current player: {'white' if self.turn else 'black'}")
+        # print(f"Current player: {'white' if self.turn else 'black'}")
         
         return move in piece.moves
 
@@ -153,8 +153,10 @@ class Board:
     def get_legal_moves(fen):
         board = chess.Board(fen)
         return list(board.legal_moves)
-    # def is_checkmate(self, color):
-    #     return self.is_in_check(color) and self.no_valid_moves(color)
+    
+    # def is_checkmate(self):
+        
+    #     return self.board.is_checkmate() #and self.no_valid_moves(color)
 
     def calc_moves(self, piece, row, col, bool=True):
         '''

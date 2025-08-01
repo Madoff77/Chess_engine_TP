@@ -114,6 +114,10 @@ class Game:
     def change_theme(self):
         self.config.change_theme()
 
+    def next_turn(self):
+        self.next_player = 'black' if self.next_player == 'white' else 'white'
+
+
 
     def reset(self):
         self.__init__()

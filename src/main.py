@@ -125,10 +125,10 @@ class Main:
                             # print('VALID MOVE:', move)
                             board.set_true_en_passant(dragger.piece)                            
 
-                            if game.next_player == 'white' and not board.turn:
-                                board.turn = True  # Force le tour des blancs
-                            elif game.next_player == 'black' and board.turn:
-                                board.turn = False  # Force le tour des noirs
+                            # if game.next_player == 'white' and not board.turn:
+                            #     board.turn = True  # Force le tour des blancs
+                            # elif game.next_player == 'black' and board.turn:
+                            #     board.turn = False  # Force le tour des noirs
 
                                                         # Évaluation par le modèle
                             # fen = board.get_fen()
@@ -158,6 +158,9 @@ class Main:
                             eval_round = round(eval_score, 3)
                             eval_str = format(eval_round, ".3f")
                             print(f"Position evaluation: {eval_str}")
+
+                            # if board.is_checkmate():
+                            #     print("Checkmate! " + piece.color + " wins!")
 
                             game.next_turn()
 
