@@ -20,7 +20,7 @@ class Main:
         self.screen = pygame.display.set_mode( (WIDTH, HEIGHT) )
         pygame.display.set_caption('Chess')
         self.game = Game()
-        self.model = load_model("model_eval.h5")  # Load your trained model here
+        self.model = load_model("model_eval.h5")  
     
     def evaluate_position(self,fen):
         vector = fen_to_tensor(fen).reshape(1, -1)  # (1, 768)
@@ -31,7 +31,8 @@ class Main:
     def get_best_move_with_minimax(self, fen, depth, model):
    
         board = chess.Board(fen)
-        _, best_move = minimax(board, depth, float('-inf'), float('inf'), True, model)
+        maximizing_player = board.turn
+        _, best_move = minimax(board, depth, float('-inf'), float('inf'), maximizing_player, model)
         return best_move
 
     def mainloop(self):
@@ -57,7 +58,7 @@ class Main:
             # Prédire le meilleur coup avant le tour du joueur
             if predict_next_move:
                 fen = board.get_fen()
-                depth = 1  # Profondeur de recherche
+                depth = 2  # Profondeur de recherche
                 best_move = self.get_best_move_with_minimax(fen, depth, self.model)
                 print(f"Next best move for {game.next_player}: {best_move}")
                 predict_next_move = False
@@ -117,12 +118,17 @@ class Main:
                         move = Move(initial, final)
 
                         # valid move ?
-                        if board.valid_move(dragger.piece, move):
+                        if board.legal_move(dragger.piece, move):
                             # normal capture
                             captured = board.squares[released_row][released_col].has_piece()
                             board.move(dragger.piece, move)
                             # print('VALID MOVE:', move)
                             board.set_true_en_passant(dragger.piece)                            
+
+                            if game.next_player == 'white' and not board.turn:
+                                board.turn = True  # Force le tour des blancs
+                            elif game.next_player == 'black' and board.turn:
+                                board.turn = False  # Force le tour des noirs
 
                                                         # Évaluation par le modèle
                             # fen = board.get_fen()

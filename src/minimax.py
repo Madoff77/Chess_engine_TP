@@ -3,11 +3,11 @@ from prep_data import *
 def minimax(board, depth, alpha, beta, maximizing_player, model):
     
         if depth == 0 or board.is_game_over():
-            # Évalue la position actuelle avec le modèle
+            # Évalue la position actuelle de fen en vector
             fen = board.fen()
             vector = fen_to_tensor(fen).reshape(1, -1)
             score = model.predict(vector, verbose=0)[0][0]
-            return score, None
+            return score if maximizing_player else -score, None
 
         legal_moves = list(board.legal_moves)
         best_move = None
