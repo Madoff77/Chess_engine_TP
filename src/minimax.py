@@ -33,8 +33,8 @@ def minimax(board, depth, alpha, beta, maximizing_player, model):
                 board.pop()
                 if eval < min_eval:
                     min_eval = eval
-                    best_move = move
+                    worst_move = move
                 beta = min(beta, eval)
                 if beta <= alpha:
                     break  # Elagage alpha
-            return min_eval, best_move
+            return min_eval, worst_move

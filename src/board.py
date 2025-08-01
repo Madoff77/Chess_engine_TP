@@ -57,6 +57,9 @@ class Board:
         # set last move
         self.last_move = move
 
+        if not testing:
+            self.turn = not self.turn  # Change turn
+
     def legal_move(self, piece, move):
         target_square = self.squares[move.final.row][move.final.col]
         if target_square.has_piece() and isinstance(target_square.piece, King):
@@ -112,8 +115,11 @@ class Board:
                 fen_row += str(empty)
             fen_rows.append(fen_row)
         fen = '/'.join(fen_rows)
-        # Add default values for active color, castling, en passant, halfmove, fullmove
-        fen += ' w - - 0 1'
+        
+        turn = 'w' if self.turn else 'b'
+
+   
+        fen = fen + " " + turn  + " - - 0 1"
         return fen
     def check_promotion(self, piece, final):
         if final.row == 0 or final.row == 7:
