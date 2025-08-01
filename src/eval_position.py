@@ -4,10 +4,10 @@ import chess.engine
 from prep_data import load_games, pgn_to_csv, fen_to_tensor
 
 pgn_path = 'dataset/lichess_elite_2022-04.pgn'
-games = load_games(pgn_path, max_games=200)
+games = load_games(pgn_path, max_games=5)
 print(f"{len(games)} parties chargées.")
  
-pgn_to_csv(pgn_path, max_games=200)
+pgn_to_csv(pgn_path, max_games=5)
 
 # Chemin vers Stockfish
 STOCKFISH_PATH = r"C:\Users\elyes\Desktop\Ipssi\S11_28-07\Chess_engine_TP\stockfish\stockfish.exe"
@@ -19,7 +19,7 @@ evals = []
 for fen in df['fen']:
     board = chess.Board(fen)
     info = engine.analyse(board, chess.engine.Limit(time=0.1))
-    score = info["score"].white().score(mate_score=100)  
+    score = info["score"].white().score(mate_score=1000)  
     evals.append(score)
 
 engine.quit()

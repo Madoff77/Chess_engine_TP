@@ -63,7 +63,7 @@ PIECE_TO_INDEX = {
  
 def fen_to_tensor(fen):
     board_tensor = np.zeros((8, 8, 12), dtype=np.float32)
-    board_fen = fen.split()[0]
+    board_fen, turn = fen.split()[0], fen.split()[1]
     rows = board_fen.split('/')
  
     for i, row in enumerate(rows):
@@ -75,4 +75,6 @@ def fen_to_tensor(fen):
                 piece_index = PIECE_TO_INDEX[char]
                 board_tensor[i, col, piece_index] = 1
                 col += 1
-    return board_tensor
+    flat_board = board_tensor.flatten()
+    turn_tensor = np.array([1.0 if turn == 'w' else 0.0], dtype=np.float32)
+    return np.concatenate([flat_board, turn_tensor])
