@@ -3,3 +3,4 @@ __pycache__/
 *.csv
 stockfish/
 model_eval.h5
+test.py

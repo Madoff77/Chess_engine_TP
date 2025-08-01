@@ -19,7 +19,7 @@ evals = []
 for fen in df['fen']:
     board = chess.Board(fen)
     info = engine.analyse(board, chess.engine.Limit(time=0.1))
-    score = info["score"].white().score(mate_score=10000)  
+    score = info["score"].white().score(mate_score=100)  
     evals.append(score)
 
 engine.quit()
