@@ -4,7 +4,7 @@ import numpy as np
 from prep_data import *
  
 def create_model():
-    # en entrée on met 768 features (12 pièces x 8 rangées x 8 colonnes)
+    # en entrée on met 768 features (12 pièces x 8 rangées x 8 colonnes + 1 pour le tour du joueur)
     model = models.Sequential([
         layers.Dense(512, activation='relu', input_shape=(769,)),  # Couche 1 + couche d'entrée cachée
         # layers.PReLU(),  
