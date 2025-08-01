@@ -14,8 +14,7 @@ def load_games(pgn_path, max_games=10):
             games.append(game)
     return games
  
-#convertit les parties en un fichier csv
-#avec les colonnes : game_id, fen, move_played, turn, result
+#convertit les parties en csv
  
 def pgn_to_csv(pgn_path, max_games=10, output_csv="chess_positions.csv"):
     data = []
@@ -37,7 +36,7 @@ def pgn_to_csv(pgn_path, max_games=10, output_csv="chess_positions.csv"):
             board = game.board()
             for move in game.mainline_moves():
                 fen = board.fen()
-                turn = fen.split()[1]  # 'w' or 'b'
+                turn = fen.split()[1]  # 'white' ou 'black'
                 board.push(move)
                 uci_move = move.uci()
  

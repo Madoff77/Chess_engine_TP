@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras import layers, models
-import numpy as np
+
 from prep_data import *
  
 def create_model():

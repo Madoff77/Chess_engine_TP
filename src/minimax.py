@@ -3,7 +3,7 @@ from prep_data import *
 def minimax(board, depth, alpha, beta, maximizing_player, model):
     
         if depth == 0 or board.is_game_over():
-            # Evalue la position actuelle de fen en vector
+            # evalue la position actuelle de fen en vecteur
             fen = board.fen()
             vector = fen_to_tensor(fen).reshape(1, -1)
             score = model.predict(vector, verbose=0)[0][0]
@@ -15,7 +15,7 @@ def minimax(board, depth, alpha, beta, maximizing_player, model):
         if maximizing_player:
             max_eval = float('-inf')
             for move in legal_moves:
-                board.push(move)
+                board.push(move) # aprés un move d'une piece
                 eval, _ = minimax(board, depth - 1, alpha, beta, False, model)
                 board.pop()
                 if eval > max_eval:
@@ -23,7 +23,7 @@ def minimax(board, depth, alpha, beta, maximizing_player, model):
                     best_move = move
                 alpha = max(alpha, eval)
                 if beta <= alpha:
-                    break  # Elagage beta
+                    break  # elagage beta
             return max_eval, best_move
         else:
             min_eval = float('inf')
@@ -36,5 +36,5 @@ def minimax(board, depth, alpha, beta, maximizing_player, model):
                     worst_move = move
                 beta = min(beta, eval)
                 if beta <= alpha:
-                    break  # Elagage alpha
+                    break  # elagage alpha
             return min_eval, worst_move
