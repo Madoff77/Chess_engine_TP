@@ -12,7 +12,7 @@ X = np.array([fen_to_tensor(fen) for fen in df['fen']])
 y = np.array(df['stockfish_eval'].values) #resultat de la partie
 X = X.reshape((-1, 768)) #reshape pour rester sur du PMC utiliser Dense
 
-y = y/10.0 # on normalise le score entre -10 et 10, 10 etant un echec et mat
+y = y/100.0 # on normalise le score entre -10 et 10, 10 etant un echec et mat
 
 X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
  

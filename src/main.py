@@ -6,12 +6,12 @@ import chess
 from prep_data import *
 from model import *
 from tensorflow.keras.models import load_model
-from const import WIDTH, HEIGHT, SQSIZE
 from const import *
 from game import Game
 from square import Square
 from move import Move
-
+from board import *
+from minimax import minimax 
 
 class Main:
 
@@ -26,6 +26,13 @@ class Main:
         vector = fen_to_tensor(fen).reshape(1, -1)  # (1, 768)
         score = self.model.predict(vector, verbose=0)[0][0]
         return score
+    
+    
+    def get_best_move_with_minimax(self, fen, depth, model):
+   
+        board = chess.Board(fen)
+        _, best_move = minimax(board, depth, float('-inf'), float('inf'), True, model)
+        return best_move
 
     def mainloop(self):
         
@@ -33,6 +40,8 @@ class Main:
         game = self.game
         board = self.game.board
         dragger = self.game.dragger
+
+        predict_next_move = True
 
         while True:
             # show methods
@@ -44,6 +53,14 @@ class Main:
 
             if dragger.dragging:
                 dragger.update_blit(screen)
+
+            # Prédire le meilleur coup avant le tour du joueur
+            if predict_next_move:
+                fen = board.get_fen()
+                depth = 1  # Profondeur de recherche
+                best_move = self.get_best_move_with_minimax(fen, depth, self.model)
+                print(f"Next best move for {game.next_player}: {best_move}")
+                predict_next_move = False
 
             for event in pygame.event.get():
 
@@ -118,17 +135,27 @@ class Main:
                             game.show_last_move(screen)
                             game.show_pieces(screen)
                             # next turn
-                            game.next_turn()
+                            
                             # if game.is_checkmate(game.board.next_turn()):
                             #     print("Échec et mat ! " + piece.color +" à gagné !" )
                             #     self.running = False
                             fen = board.get_fen()  
                             tensor = fen_to_tensor(fen) # (1, 768)
+                            # Calcul du meilleur prochain coup
+                            # depth = 3  # Profondeur de recherche
+                            # best_move = self.get_best_move_with_minimax(fen, depth, self.model)
+                            # print(f"Next best move: {best_move}")
+
+                            
                             # vector = tensor.reshape(1, -1)
                             eval_score = self.evaluate_position(fen)
                             eval_round = round(eval_score, 3)
                             eval_str = format(eval_round, ".3f")
                             print(f"Position evaluation: {eval_str}")
+
+                            game.next_turn()
+
+                            predict_next_move = True
 
 
                     dragger.undrag_piece()
