@@ -19,7 +19,7 @@ X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_st
 model = create_model()
 reduce_lr = ReduceLROnPlateau(
     monitor="val_loss",    
-    factor=0.1,         # réduire de moitié le LR
+    factor=0.5,         # réduire de moitié le LR
     patience=3,
     verbose=1
     )
